@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Profile Card - Bsnss Karthikeya</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap');
+
+  /* Body and background */
+  body {
+    margin: 0;
+    height: 100vh;
+    font-family: 'Poppins', sans-serif;
+    background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+  }
+
+  /* Shooting stars in background */
+  body::before, body::after {
+    content: '';
+    position: absolute;
+    background: linear-gradient(-45deg, white, rgba(255,255,255,0));
+    border-radius: 50%;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 0;
+  }
+  body::before {
+    top: -100px;
+    left: 50%;
+    width: 3px;
+    height: 100px;
+    transform: translateX(-50%) rotate(45deg);
+    animation: shooting-star 2s ease-in-out infinite;
+    animation-delay: 1s;
+  }
+  body::after {
+    top: 20vh;
+    left: 20vw;
+    width: 2px;
+    height: 60px;
+    transform: rotate(45deg);
+    animation: shooting-star 1.5s ease-in-out infinite;
+    animation-delay: 3s;
+  }
+  @keyframes shooting-star {
+    0% {
+      opacity: 0;
+      transform: translateX(0) translateY(0) rotate(45deg);
+    }
+    50% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+      transform: translateX(300px) translateY(300px) rotate(45deg);
+    }
+  }
+
+  /* Star background dots */
+  .stars {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    box-shadow:
+      50px 70px #fff,
+      120px 100px #fff,
+      200px 30px #fff,
+      300px 150px #fff,
+      400px 80px #fff,
+      460px 130px #fff,
+      520px 200px #fff,
+      600px 10px #fff,
+      680px 140px #fff,
+      750px 60px #fff,
+      820px 180px #fff,
+      900px 90px #fff;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Profile card container */
+  .profile-card {
+    width: 350px;
+    height: 450px;
+    perspective: 1200px;
+    z-index: 1;
+  }
+
+  /* Card inner (flippable) */
+  .card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border-radius: 20px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.7);
+    background: rgba(255, 255, 255, 0.95);
+    transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    transform-style: preserve-3d;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* Flipped state */
+  .profile-card.flipped .card-inner {
+    transform: rotateY(180deg);
+  }
+
+  /* Front and back faces */
+  .card-front,
+  .card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 20px;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+
+  /* Front face styling */
+  .card-front {
+    padding: 40px 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+  }
+
+  .profile-image {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    border: 5px solid #9b59b6;
+    object-fit: cover;
+    margin-bottom: 28px;
+    box-shadow: 0 0 15px rgba(155, 89, 182, 0.6);
+    transition: transform 0.3s ease;
+  }
+
+  .profile-name {
+    font-weight: 700;
+    font-size: 2rem;
+    margin: 0 0 12px 0;
+    color: #333333;
+    user-select: none;
+  }
+
+  .profile-role {
+    color: #9b59b6;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    margin: 0 0 30px 0;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    user-select: none;
+  }
+
+  .flip-hint {
+    color: #9b59b6;
+    font-weight: 400;
+    font-size: 1rem;
+    letter-spacing: 0.05em;
+    user-select: none;
+  }
+
+  /* Back face styling */
+  .card-back {
+    background: #f0e6ff;
+    padding: 40px 30px 30px 30px;
+    color: #3b1a64;
+    transform: rotateY(180deg);
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+  }
+
+  /* Scrollable About Me section */
+  .profile-bio {
+    font-weight: 400;
+    font-size: 1.05rem;
+    line-height: 1.6;
+    user-select: none;
+    margin-bottom: 30px;
+    max-height: 140px; /* Fixed height */
+    overflow-y: auto;
+    padding-right: 8px; /* Space for scrollbar */
+  }
+
+  /* Scrollbar styling for WebKit (Chrome, Safari, Edge) */
+  .profile-bio::-webkit-scrollbar {
+    width: 8px;
+  }
+  .profile-bio::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 10px;
+  }
+  .profile-bio::-webkit-scrollbar-thumb {
+    background-color: #9b59b6;
+    border-radius: 10px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+  }
+
+  /* Scrollbar styling for Firefox */
+  .profile-bio {
+    scrollbar-width: thin;
+    scrollbar-color: #9b59b6 transparent;
+  }
+
+  .social-links {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-top: auto;
+  }
+
+  .social-links a {
+    color: #7d54b3;
+    font-size: 2rem;
+    transition: color 0.3s ease;
+    text-decoration: none;
+  }
+
+  .social-links a:hover,
+  .social-links a:focus {
+    color: #4a276b;
+  }
+
+  /* Accessibility focus outline for keyboard navigation */
+  .profile-card:focus .card-inner {
+    outline: 3px solid #9b59b6;
+    outline-offset: 5px;
+  }
+</style>
+</head>
+<body>
+  <div class="stars" aria-hidden="true"></div>
+  <div class="profile-card" aria-label="User profile card" tabindex="0" role="button" aria-pressed="false" title="Click or press Enter to flip profile card">
+    <div class="card-inner" id="cardInner">
+      <div class="card-front">
+        <img src="Profile%20Card%20-%20Bsnss%20Karthikeya_files/1.jpg.jpg" alt="Profile picture of Bsnss Karthikeya" class="profile-image">
+        <h2 class="profile-name">Bsnss Karthikeya</h2>
+        <p class="profile-role" aria-label="Role">Developer</p>
+        <p class="flip-hint" aria-hidden="true">Click or press Enter to flip</p>
+      </div>
+      <div class="card-back">
+        <h2>About Me</h2>
+        <p class="profile-bio">
+          Hi, I'm Bsnss Karthikeya. I have excellent learning skills and
+ I am currently studying at Sphoorthy Engineering College. I enjoy 
+learning new technologies and improving my coding skills regularly. In 
+my free time, I like exploring creative projects and solving algorithmic
+ challenges to keep my mind sharp and ready for professional growth.
+        </p>
+        <div class="social-links" aria-label="Social media links">
+          <a href="https://instagram.com/" target="_blank" rel="noopener" aria-label="Instagram" title="Instagram">
+            <svg fill="currentColor" height="28" width="28" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7.75 2A5.75 5.75 0 002 7.75v8.5A5.75 5.75 0 007.75 22h8.5A5.75 5.75 0 0022 16.25v-8.5A5.75 5.75 0 0016.25 2h-8.5zm0 2h8.5A3.75 3.75 0 0120 7.75v8.5a3.75 3.75 0 01-3.75 3.75h-8.5A3.75 3.75 0 014 16.25v-8.5A3.75 3.75 0 017.75 4zm4.25 2.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zm0 2a3.5 3.5 0 110 7 3.5 3.5 0 010-7zm3.6-.88a1.1 1.1 0 11-2.2 0 1.1 1.1 0 012.2 0z"></path></svg>
+          </a>
+          <a href="https://linkedin.com/in/bsnsskarthikeya" target="_blank" rel="noopener" aria-label="LinkedIn" title="LinkedIn">
+            <svg fill="currentColor" height="28" width="28" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4.98 3.5c0 1.381-1.113 2.5-2.48 2.5S0 4.881 0 3.5 1.113 1 2.5 1 4.98 2.12 4.98 3.5zM.222 8.276h4.517V24H.222zM7.829 8.276h4.334v2.17h.06c.604-1.14 2.076-2.34 4.268-2.34 4.565 0 5.406 3.002 5.406 6.9V24h-4.533v-7.615c0-1.818-.033-4.159-2.534-4.159-2.535 0-2.922 1.983-2.922 4.02V24H7.829z"></path></svg>
+          </a>
+          <a href="https://github.com/bsnsskarthikeya" target="_blank" rel="noopener" aria-label="GitHub" title="GitHub">
+            <svg fill="currentColor" height="28" width="28" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.294 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.416-4.042-1.416-.546-1.388-1.333-1.757-1.333-1.757-1.089-.744.084-.729.084-.729 1.205.084 1.838 1.234 1.838 1.234 1.07 1.835 2.809 1.305 3.495.998.107-.775.42-1.305.763-1.605-2.665-.3-5.466-1.332-5.466-5.931 0-1.31.465-2.381 1.235-3.221-.135-.302-.54-1.52.105-3.176 0 0 1.005-.322 3.3 1.23a11.46 11.46 0 013.003-.404c1.02.004 2.045.138 3.003.404 2.28-1.554 3.285-1.23 3.285-1.23.645 1.656.24 2.874.12 3.176.765.84 1.23 1.911 1.23 3.221 0 4.609-3.807 5.625-7.44 5.921.42.36.81 1.096.81 2.213 0 1.597-.015 2.884-.015 3.276 0 .315.21.69.825.573C20.565 22.092 24 17.59 24 12.297c0-6.627-5.373-12-12-12"></path></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+<script>
+  const profileCard = document.querySelector('.profile-card');
+
+  function toggleFlip() {
+    const flipped = profileCard.classList.toggle('flipped');
+    profileCard.setAttribute('aria-pressed', flipped ? 'true' : 'false');
+  }
+
+  profileCard.addEventListener('click', toggleFlip);
+  profileCard.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      toggleFlip();
+    }
+  });
+</script>
+<!-- Code injected by live-server -->
+<script>
+	// <![CDATA[  <-- For SVG support
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// ]]>
+</script>
+
+
+</body></html>
